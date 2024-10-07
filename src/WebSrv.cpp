@@ -106,7 +106,7 @@ void ESPWebDAV::rejectClient(String rejectMessage) {
 void ESPWebDAV::processClient(THandlerFunction handler, String message) {
 // ------------------------
 	// Check if a client has connected
-	client = server->available();
+	client = server->accept();
 	if(!client)
 		return;
 

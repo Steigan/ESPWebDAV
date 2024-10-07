@@ -3,6 +3,9 @@
 
 #define SPI_BLOCKOUT_PERIOD	20000UL
 
+#define LED_ON				{digitalWrite(2, LOW);}
+#define LED_OFF				{digitalWrite(2, HIGH);}
+
 class SDControl {
 public:
   SDControl() { }
@@ -10,9 +13,11 @@ public:
   static void takeBusControl();
   static void relinquishBusControl();
   static bool canWeTakeBus();
- 
+ 	static bool isBusBusy();
+
 private:
-  static volatile long _spiBlockoutTime;
+	static void CSSenseInterrupt();
+  static volatile unsigned long _spiBlockoutTime;
   static bool _weTookBus;
 };
 

@@ -1,44 +1,41 @@
 // Using the WebDAV server with Rigidbot 3D printer.
 // Printer controller is a variation of Rambo running Marlin firmware
 
-#include "serial.h"
-#include "parser.h"
+#include <Arduino.h>
+#include "serial_min.h"
 #include "config.h"
+#include "consts.h"
 #include "network.h"
-#include "gcode.h"
 #include "sdControl.h"
+#include "pins.h"
 
 // LED is connected to GPIO2 on this board
 #define INIT_LED			{pinMode(2, OUTPUT);}
 #define LED_ON				{digitalWrite(2, LOW);}
 #define LED_OFF				{digitalWrite(2, HIGH);}
+#define LED_SET(state)	{digitalWrite(2, state ? LOW : HIGH);}
+
+// ------------------------
+void blink();
+void statusBlink();
+void handleBootButton(void);
 
 // ------------------------
 void setup() {
+	pinMode(BOOT_BUTTON_PIN, INPUT_PULLUP);
 	SERIAL_INIT(115200);
 	INIT_LED;
 	blink();
-	
+  SERIAL_ECHOLN("\n\n**********************************************");
+  SERIAL_ECHO(APP_TITLE); SERIAL_ECHO(" Version "); SERIAL_ECHOLN(APP_VERSION);
+  SERIAL_ECHOLN("**********************************************\n");
+  SERIAL_ECHO("Loading additional settings from EEPROM : ");
+  SERIAL_ECHOLN(config.load() ? "Success" : "Fail! Set default values");
+
+  SERIAL_ECHOLN("Turning on SPI bus control. Module will not occupy the bus for at least 20 seconds");
 	sdcontrol.setup();
 
-	// ----- WIFI -------
-  if(config.load() == 1) { // Connected before
-    if(!network.start()) {
-      SERIAL_ECHOLN("Connect fail, please check your INI file or set the wifi config and connect again");
-      SERIAL_ECHOLN("- M50: Set the wifi ssid , 'M50 ssid-name'");
-      SERIAL_ECHOLN("- M51: Set the wifi password , 'M51 password'");
-      SERIAL_ECHOLN("- M52: Start to connect the wifi");
-      SERIAL_ECHOLN("- M53: Check the connection status");
-    }
-  }
-  else {
-    SERIAL_ECHOLN("Welcome to FYSETC: www.fysetc.com");
-    SERIAL_ECHOLN("Please set the wifi config first");
-    SERIAL_ECHOLN("- M50: Set the wifi ssid , 'M50 ssid-name'");
-    SERIAL_ECHOLN("- M51: Set the wifi password , 'M51 password'");
-    SERIAL_ECHOLN("- M52: Start to connect the wifi");
-    SERIAL_ECHOLN("- M53: Check the connection status");
-  }
+  network.start();
 }
 
 // ------------------------
@@ -46,11 +43,11 @@ void loop() {
   // handle the request
 	network.handle();
 
-  // Handle gcode
-  gcode.Handle();
-
   // blink
   statusBlink();
+
+  // handle boot button
+	handleBootButton();
 }
 
 // ------------------------
@@ -63,26 +60,17 @@ void blink()	{
 }
 
 // ------------------------
-void errorBlink()	{
-// ------------------------
-	for(int i = 0; i < 100; i++)	{
-		LED_ON; 
-		delay(50); 
-		LED_OFF; 
-		delay(50);
-	}
-}
-
 void statusBlink() {
+// ------------------------
   static unsigned long time = 0;
   if(millis() > time + 1000 ) {
     if(network.isConnecting()) {
-      LED_OFF;
-    }
-    else if(network.isConnected()) {
       LED_ON; 
   		delay(50); 
   		LED_OFF; 
+    }
+    else if(network.isConnected()) {
+			LED_SET(sdcontrol.isBusBusy());
     }
     else {
       LED_ON;
@@ -93,4 +81,42 @@ void statusBlink() {
   // SPI bus not ready
 	//if(millis() < spiBlockoutTime)
 	//	blink();
+}
+
+// The flash button is used to reset the WiFi settings
+// ------------------------
+void handleBootButton(void) {
+// ------------------------
+  static unsigned long last_millis = millis();
+  static byte last_state = 0;
+  if (digitalRead(BOOT_BUTTON_PIN) == 0) {
+    if (!last_state) {
+      last_state = 1;
+      last_millis = millis();
+      return;
+    }
+    if ((millis() - last_millis > 5000) && (last_state == 1)) {
+      last_state = 2;
+      SERIAL_ECHOLN("\nBOOT button pressed for 5 seconds");
+
+      // Let the LED blinking 3 times
+      for (int i = 0; i < 3; i++) {
+        blink();
+      }
+
+      SERIAL_ECHOLN("Reset additional settings");
+			config.setToDefaults();
+			config.save();
+
+      SERIAL_ECHOLN("Reset WiFi settings");
+      network.resetWMSettings();
+
+      SERIAL_ECHOLN("Reboot...");
+      ESP.restart();
+    }
+  } else {
+    if (last_state) {
+      last_state = 0;
+    }
+  }
 }

@@ -1,32 +1,35 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-#include <stdio.h>
-#include <string.h>
+#define WIFI_HOSTNAME_LEN 32
+#define WIFI_NTPSERVER_LEN 64
+#define WIFI_NTPSOURCE_MAX 2
 
-#define WIFI_SSID_LEN 32
-#define WIFI_PASSWD_LEN 64
+#define WIFI_HOSTNAME_MIN_LEN 4
+#define WIFI_NTPSERVER_MIN_LEN 4
+#define WIFI_NTPSERVER_MIN_LEN 4
 
 #define EEPROM_SIZE 512
 
 typedef struct config_type
 {
-  unsigned char flag; // Was saved before?
-  char ssid[32];
-  char psw[64];
+  char hostname[WIFI_HOSTNAME_LEN];
+  uint8_t ntpSource;
+  char ntpServer[WIFI_NTPSERVER_LEN];
 }CONFIG_TYPE;
 
 class Config	{
 public:
-  int loadSD();
-	unsigned char load();
-  char* ssid();
-  void ssid(char* ssid);
-  char* password();
-  void password(char* password);
-  void save(const char*ssid,const char*password);
+	void setToDefaults();
+	bool load();
   void save();
-  int save_ip(const char *ip);
+	void save(const char* hostname, uint8_t ntpSource, const char* ntpServer);
+  char* hostname();
+  void hostname(const char* hostname);
+  uint8_t ntpSource();
+  void ntpSource(uint8_t ntpSource);
+  char* ntpServer();
+  void ntpServer(const char* ntpServer);
 
 protected:
   CONFIG_TYPE data;
