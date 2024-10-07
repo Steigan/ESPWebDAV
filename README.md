@@ -1,4 +1,4 @@
-[EN](README.MD) | [RU](README_RU.MD)
+[EN](README.md) | [RU](README_RU.md)
 # Alternative firmware for FYSETC SD-WIFI and BIGTREETECH BTT TF/SD Cloud modules
 > [!NOTE]
 > Based on [FYSETC/ESPWebDAV](https://github.com/FYSETC/ESPWebDAV) [version 1.1.1](https://github.com/FYSETC/ESPWebDAV/releases/tag/v1.1.1) firmware. Original [README](README_ORI.MD).
@@ -41,23 +41,28 @@
 * UTF8 file name support**.
 * Supports FAT16 and FAT32.
 * Supports SD/TF cards up to 32GB.
->[!WARNING] * Bus busy is indicated by a continuous LED. The main device must not access the SD card while writing and reading files via WebDAV protocol!
+> [!WARNING]
+> \* Bus busy is indicated by a continuous LED. The main device must not access the SD card while writing and reading files via WebDAV protocol!
 
->[!WARNING] ** In some WebDAV client applications it is necessary to enable UTF8 encoding.
+> [!WARNING]
+> \** In some WebDAV client applications it is necessary to enable UTF8 encoding.
 
-> [!NOTE] Communication between the ESP8266/ESP8285 and some newer routers can be unstable. For example, my router required disabling QAM-256 mode for the module to work properly.
+> [!NOTE]
+> Communication between the ESP8266/ESP8285 and some newer routers can be unstable. For example, my router required disabling QAM-256 mode for the module to work properly.
 
 ## Download
 Firmware releases are available at the following link: https://github.com/Steigan/ESPWebDAV/releases.
 
 ## Initial installation
->[!WARNING] If you want to keep the original firmware, please take the appropriate steps yourself.
+> [!WARNING]
+> If you want to keep the original firmware, please take the appropriate steps yourself.
 
 ### Windows
 * Download the `bin file` from the latest [release](https://github.com/Steigan/ESPWebDAV/releases).
 * Download the **`Tasmotizer`** from [link](https://github.com/tasmota/tasmotizer/releases).
 * Connect the module to a USB port on your computer. 
->[!WARNING] Do not insert the module into the SD slot of your computer! The switch on the FYSETC module must be set to the USB2UART position beforehand.   
+> [!WARNING]
+> Do not insert the module into the SD slot of your computer! The switch on the FYSETC module must be set to the USB2UART position beforehand.   
 * Switch the module into the firmware mode. To do this, press and hold the `BOOT`/`FLASH` button. Briefly press the `RST` reset button. The LED will blink once. Release the `BOOT`/`FLASH` button.
 * Start the `Tasmotizer`:
  
@@ -72,7 +77,8 @@ Firmware releases are available at the following link: https://github.com/Steiga
 * Download the `bin file` from the latest [release](https://github.com/Steigan/ESPWebDAV/releases).
 * You will need **`esptool.py`** for flashing. Details can be found at https://github.com/espressif/esptool.
 * Connect the module to a USB port on your computer. 
->[!WARNING] Do not insert the module into the SD slot of your computer! The switch on the FYSETC module must be set to the USB2UART position beforehand.   
+> [!WARNING]
+> Do not insert the module into the SD slot of your computer! The switch on the FYSETC module must be set to the USB2UART position beforehand.   
 * Switch the module into the firmware mode. To do this, press and hold the `BOOT`/`FLASH` button. Briefly press the `RST` reset button. The LED will blink once. Release the `BOOT`/`FLASH` button.
 * Determine which serial interface the module is connected to.
 * Execute the command `esptool.py -p <port> write_flash 0x0000 <bin file>` and wait for completion.
@@ -81,10 +87,10 @@ Firmware releases are available at the following link: https://github.com/Steiga
 ## Over-the-Air (OTA) firmware update via Web portal
 
 The module must be installed in the main device slot or connected via USB.
-* Download the `bin file` from the latest [release](https://github.com/Steigan/ESPWebDAV/releases).
+* Download the `bin.gz file` from the latest [release](https://github.com/Steigan/ESPWebDAV/releases).
 * Go to the Web portal of the module in your browser to `http://<module hostname or IP>`.
 * Select the `Update` menu item.
-* Select the `bin file` of the firmware.
+* Select the `bin.gz file` of the firmware (drag and drop is supported).
 * Click `Update`.
 * Reboot the module by pressing the `RST` button.
 
