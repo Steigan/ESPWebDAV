@@ -1,0 +1,21 @@
+{
+    "editor.formatOnSave": false,
+    "C_Cpp.clang_format_fallbackStyle": "none",
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+			"*.tcc": "cpp",
+			"list": "cpp",
+			"optional": "cpp",
+			"ostream": "cpp",
+			"ratio": "cpp",
+			"system_error": "cpp",
+			"array": "cpp",
+			"functional": "cpp",
+			"tuple": "cpp",
+			"type_traits": "cpp",
+			"utility": "cpp",
+			"variant": "cpp"
+		},
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false
+}
