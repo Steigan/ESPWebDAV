@@ -1,7 +1,7 @@
 [EN](README.md) | [RU](README_RU.md)
 # Alternative firmware for FYSETC SD-WIFI and BIGTREETECH BTT TF/SD Cloud modules
 > [!NOTE]
-> Based on [FYSETC/ESPWebDAV](https://github.com/FYSETC/ESPWebDAV) [version 1.1.1](https://github.com/FYSETC/ESPWebDAV/releases/tag/v1.1.1) firmware. Original [README](README_ORI.MD).
+> Based on [FYSETC/ESPWebDAV](https://github.com/FYSETC/ESPWebDAV) [version 1.1.1](https://github.com/FYSETC/ESPWebDAV/releases/tag/v1.1.1) firmware. Original [README](README_ORI.md).
 > 
 > Key differences from the original:
 > * Espressif8266 platform has been updated (tested on espressif8266 @ 4.2.1).
