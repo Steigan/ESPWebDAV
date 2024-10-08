@@ -94,7 +94,7 @@ The module must be installed in the main device slot or connected via USB.
 * Click `Update`.
 * Reboot the module by pressing the `RST` button.
 
-## Reset settings and credentials
+## Reset settings and credentials to defaults
 
 The module must be installed in the main device slot or connected via USB.
 * Press the `BOOT`/`FLASH` button for more than 5 seconds until the LED flashes three times.
@@ -117,8 +117,8 @@ The module must be installed in the main device slot or connected via USB.
 ## Normal module operation
 
 ### Module boot sequence and indication
-* Several short LED flashes indicate initialization of the UART interface for debug information transmission.
-* Continuous LED flashes indicate that the module is connected to the WiFi network.
+* After boot several short LED blinks indicate initialization of the UART interface for debug information transmission.
+* Continuous LED light indicate that the module is connecting to the WiFi network.
 * Repeated LED flashes indicate that WiFi is connected, the Web portal is available, and the WebDAV server is expected to start.
 * The WebDAV server is started as soon as the SPI bus is free, but not earlier than 20 seconds after the module is booted. This is to avoid conflict with the host device at the time of insertion into the slot or common power supply.
 * After all services have been initialized, the LED goes out.
